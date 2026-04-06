@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GVE Express | Gestoría Vehicular Express Nacional</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS (Animate On Scroll) -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+
+
+    <style>
+        /* ============================================================
+           ROOT & RESET
+        ============================================================ */
+        :root {
+            --navy:        #06101E;
+            --navy-mid:    #0B1A2E;
+            --navy-light:  #122240;
+            --gold:        #BFA05A;
+            --gold-light:  #D4B87A;
+            --gold-pale:   #F0E4C3;
+            --white:       #FFFFFF;
+            --off-white:   #F7F5F0;
+            --text-muted:  #8A9BB5;
+            --glass-bg:    rgba(11, 26, 46, 0.7);
+            --glass-border:rgba(191, 160, 90, 0.18);
+            --radius-sm:   4px;
+            --radius-md:   10px;
+            --ease-expo:   cubic-bezier(0.19, 1, 0.22, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            background: var(--navy);
+            color: var(--white);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        img { display: block; max-width: 100%; }
+        a { text-decoration: none; color: inherit; }
+
+        /* ============================================================
+           PROGRESS BAR
+        ============================================================ */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 2px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
+
+        /* ============================================================
+           NAVIGATION
+        ============================================================ */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 0 6%;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border-bottom: 1px solid var(--glass-border);
+            transition: background 0.4s var(--ease-smooth);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+        .nav-logo-mark {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+        }
+        .nav-logo-sub {
+            font-size: 0.58rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 22px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            transition: all 0.3s var(--ease-smooth);
+        }
+        .nav-cta:hover {
+            background: rgba(191,160,90,0.12);
+            border-color: var(--gold);
+            color: var(--gold-light);
+        }
+
+        /* ============================================================
+           HERO — SPLIT LAYOUT
+        ============================================================ */
+        .hero {
+            min-height: 100svh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated noise grain overlay */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0.3;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 8% 80px 10%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+        .hero-eyebrow::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 5.5vw, 5.2rem);
+            font-weight: 300;
+            line-height: 1.08;
+            margin-bottom: 28px;
+            letter-spacing: -0.5px;
+        }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 420px;
+            margin-bottom: 48px;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: var(--gold);
+            color: var(--navy);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gold);
+            transition: all 0.35s var(--ease-expo);
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px rgba(191,160,90,0.25);
+        }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+        .btn-ghost:hover { color: var(--gold-light); }
+        .btn-ghost i { transition: transform 0.3s; }
+        .btn-ghost:hover i { transform: translateX(4px); }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 64px;
+            padding-top: 40px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .hero-stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--gold);
+            line-height: 1;
+        }
+        .hero-stat-label {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Hero right — image panel */
+        .hero-right {
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-right::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                105deg,
+                var(--navy) 0%,
+                rgba(6,16,30,0.3) 35%,
+                transparent 60%
+            );
+            z-index: 1;
+        }
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.04);
+            animation: slowZoom 18s ease-in-out infinite alternate;
+        }
+
+        /* Floating badge */
+        .hero-badge {
+            position: absolute;
+            bottom: 48px;
+            right: 48px;
+            z-index: 4;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            padding: 20px 24px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            animation: floatBadge 4s ease-in-out infinite;
+        }
+        .hero-badge-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--gold);
+            line-height: 1;
+        }
+        .hero-badge-text {
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Remote banner inside hero */
+        .hero-remote-tag {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 4;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(191,160,90,0.12);
+            border: 1px solid rgba(191,160,90,0.4);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+        }
+        .pulse-dot {
+            width: 7px; height: 7px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes slowZoom { from { transform: scale(1.04); } to { transform: scale(1.12); } }
+        @keyframes floatBadge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes pulseDot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.5); } }
+
+        /* ============================================================
+           TRUST STRIP
+        ============================================================ */
+        .trust-strip {
+            background: var(--navy-mid);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 28px 10%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+        }
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .trust-icon-wrap {
+            width: 40px; height: 40px;
+            background: rgba(191,160,90,0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--gold);
+        }
+        .trust-item-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: 0.3px;
+        }
+        .trust-item-sub {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           SECTION BASE
+        ============================================================ */
+        .section { padding: 110px 10%; }
+        .section-light { background: var(--off-white); color: var(--navy); }
+        .section-mid { background: var(--navy-mid); }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.68rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 4vw, 3.6rem);
+            font-weight: 300;
+            line-height: 1.1;
+        }
+        .section-title.light { color: var(--navy); }
+        .section-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .section-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin-top: 14px;
+            font-weight: 300;
+            line-height: 1.9;
+        }
+        .section-desc.dark { color: #5A6B7E; }
+
+        /* ============================================================
+           STATES / TABS
+        ============================================================ */
+        .tabs-header { margin-bottom: 48px; }
+
+        .states-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 36px;
+        }
+
+        .state-btn {
+            position: relative;
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid #D6CDB8;
+            border-radius: var(--radius-sm);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #7A8B99;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-smooth);
+            overflow: hidden;
+        }
+        .state-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--navy);
+            transform: translateY(100%);
+            transition: transform 0.35s var(--ease-expo);
+        }
+        .state-btn span { position: relative; z-index: 1; }
+        .state-btn:hover { border-color: var(--navy); color: var(--navy); }
+        .state-btn:hover::after { transform: translateY(0); }
+        .state-btn:hover span { color: var(--gold); }
+
+        .state-btn.active {
+            background: var(--navy);
+            border-color: var(--navy);
+            color: var(--gold);
+        }
+        .state-btn.active span { color: var(--gold); }
+
+        /* Tab panels */
+        .tab-panel { display: none; }
+        .tab-panel.active {
+            display: block;
+            animation: panelIn 0.55s var(--ease-expo);
+        }
+        @keyframes panelIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .state-header-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding-bottom: 32px;
+            margin-bottom: 36px;
+            border-bottom: 1px solid #E5DDD0;
+        }
+        .state-accent-bar {
+            width: 4px;
+            height: 56px;
+            background: linear-gradient(180deg, var(--gold), transparent);
+            border-radius: 2px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .state-header-block h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.4rem;
+            font-weight: 400;
+            color: var(--navy);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .state-header-block p {
+            font-size: 0.85rem;
+            color: #7A8B99;
+        }
+
+        /* Tramite cards grid */
+        .tramites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .card-tramite {
+            position: relative;
+            padding: 28px;
+            background: #FFFFFF;
+            border: 1px solid #EAE4DA;
+            border-radius: var(--radius-md);
+            transition: all 0.4s var(--ease-expo);
+            overflow: hidden;
+            cursor: default;
+        }
+        .card-tramite::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(191,160,90,0.06), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .card-tramite:hover {
+            border-color: rgba(191,160,90,0.6);
+            transform: translateY(-4px);
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.08),
+                0 0 0 1px rgba(191,160,90,0.15),
+                inset 0 0 20px rgba(191,160,90,0.04);
+        }
+        .card-tramite:hover::before { opacity: 1; }
+
+        .card-icon-wrap {
+            width: 44px; height: 44px;
+            background: rgba(191,160,90,0.1);
+            border: 1px solid rgba(191,160,90,0.2);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            margin-bottom: 18px;
+            transition: all 0.3s;
+        }
+        .card-tramite:hover .card-icon-wrap {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .card-tramite h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+        .card-tramite p {
+            font-size: 0.82rem;
+            color: #7A8B99;
+            line-height: 1.6;
+        }
+
+        .card-num {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: #F0EAE0;
+            line-height: 1;
+            pointer-events: none;
+            transition: color 0.3s;
+        }
+        .card-tramite:hover .card-num { color: rgba(191,160,90,0.12); }
+
+        /* ============================================================
+           PROCESO (4 PASOS)
+        ============================================================ */
+        .proceso-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            margin-top: 60px;
+            position: relative;
+        }
+
+        /* Connecting line */
+        .proceso-grid::before {
+            content: '';
+            position: absolute;
+            top: 38px;
+            left: calc(12.5% + 20px);
+            right: calc(12.5% + 20px);
+            height: 1px;
+            border-top: 1.5px dashed rgba(191,160,90,0.3);
+            z-index: 0;
+        }
+
+        .paso {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .paso-circle {
+            width: 76px; height: 76px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            background: var(--navy-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            position: relative;
+            transition: all 0.4s var(--ease-expo);
+            color: var(--gold);
+        }
+        .paso-circle::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1px dashed rgba(191,160,90,0.25);
+        }
+        .paso:hover .paso-circle {
+            background: rgba(191,160,90,0.12);
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(191,160,90,0.15);
+        }
+
+        .paso-num-badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            width: 22px; height: 22px;
+            background: var(--gold);
+            border-radius: 50%;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .paso h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+        .paso p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* ============================================================
+           REVIEWS
+        ============================================================ */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .review-card {
+            padding: 36px;
+            background: var(--navy-light);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            position: relative;
+            transition: all 0.4s var(--ease-smooth);
+        }
+        .review-card:hover {
+            border-color: rgba(191,160,90,0.4);
+            transform: translateY(-4px);
+        }
+
+        .review-quote-mark {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            line-height: 0.6;
+            color: rgba(191,160,90,0.15);
+            position: absolute;
+            top: 28px;
+            left: 28px;
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 3px;
+            color: var(--gold);
+            font-size: 0.75rem;
+            margin-bottom: 20px;
+        }
+        .review-text {
+            font-size: 0.92rem;
+            color: #B0C0D4;
+            line-height: 1.8;
+            font-weight: 300;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+        }
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .rev-avatar {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--navy);
+            flex-shrink: 0;
+        }
+        .rev-name { font-size: 0.88rem; font-weight: 600; }
+        .rev-location { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* ============================================================
+           PRIVACY / REMOTE SECTION
+        ============================================================ */
+        .privacy-section {
+            background: var(--navy-mid);
+            padding: 90px 10%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .privacy-visual {
+            position: relative;
+        }
+        .privacy-img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            filter: brightness(0.7);
+        }
+        .privacy-overlay-card {
+            position: absolute;
+            bottom: -24px;
+            left: -24px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(16px);
+            padding: 24px 28px;
+            border-radius: var(--radius-md);
+        }
+        .privacy-overlay-title {
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+        .privacy-overlay-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            line-height: 1.2;
+        }
+
+        .privacy-features {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            margin-top: 44px;
+        }
+        .privacy-feat {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+        .privacy-feat-icon {
+            width: 44px; height: 44px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            flex-shrink: 0;
+            background: rgba(191,160,90,0.05);
+        }
+        .privacy-feat h5 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .privacy-feat p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* ============================================================
+           CTA FINAL
+        ============================================================ */
+        .cta-section {
+            padding: 120px 10%;
+            text-align: center;
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(191,160,90,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cta-section .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            max-width: 720px;
+            margin: 0 auto 16px;
+        }
+        .cta-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 48px;
+            font-weight: 300;
+        }
+        .cta-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        footer {
+            background: #030A14;
+            border-top: 1px solid var(--glass-border);
+            padding: 40px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+        .footer-note {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+        .footer-privacy {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ============================================================
+           WHATSAPP FLOAT
+        ============================================================ */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 32px; right: 32px;
+            width: 60px; height: 60px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            box-shadow: 0 8px 30px rgba(37,211,102,0.35);
+            transition: all 0.3s var(--ease-expo);
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 16px 40px rgba(37,211,102,0.4);
+        }
+
+        /* ============================================================
+           ANIMATIONS
+        ============================================================ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 960px) {
+            .hero { grid-template-columns: 1fr; min-height: auto; }
+            .hero-right { display: none; }
+            .hero-left { padding: 100px 6% 60px; }
+            .proceso-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+            .proceso-grid::before { display: none; }
+            .privacy-section { grid-template-columns: 1fr; gap: 40px; }
+            .privacy-visual { display: none; }
+            nav { padding: 0 5%; }
+        }
+
+        @media (max-width: 600px) {
+            .section { padding: 70px 5%; }
+            .hero-left { padding: 90px 5% 60px; }
+            .hero-stats { flex-direction: column; gap: 24px; }
+            .proceso-grid { grid-template-columns: 1fr; }
+            .trust-strip { padding: 24px 5%; }
+            footer { flex-direction: column; align-items: flex-start; }
+            .cta-section { padding: 80px 5%; }
+            .states-nav { gap: 6px; }
+            .state-btn { padding: 10px 16px; font-size: 0.72rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav>
+    <div class="nav-logo">
+        <span class="nav-logo-mark">GVE EXPRESS</span>
+        <span class="nav-logo-sub">Gestoría Vehicular</span>
+    </div>
+    <a href="#" id="navCta" class="nav-cta">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Asesoría Gratuita
+    </a>
+</nav>
+
+<!-- ============================================================
+     HERO — SPLIT
+============================================================ -->
+<section class="hero">
+    <div class="hero-left">
+        <span class="hero-eyebrow">Gestoría Vehicular Express Nacional</span>
+        <h1>
+            Trámites<br>
+            <em>eficaces</em> y<br>
+            completamente remotos
+        </h1>
+        <p class="hero-desc">
+            Consultoría profesional para emplacamiento, cambios de propietario y regularización. Atendemos desde Cuernavaca, Morelos, de forma 100% digital para proteger su privacidad.
+        </p>
+        <div class="hero-actions">
+            <a href="#cobertura" class="btn-primary" id="heroCta">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Ver cobertura por estado
+            </a>
+            <a href="#proceso" class="btn-ghost">
+                Cómo funciona
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div>
+                <div class="hero-stat-num">+15</div>
+                <div class="hero-stat-label">Años de experiencia</div>
+            </div>
+            <div>
+                <div class="hero-stat-num">6</div>
+                <div class="hero-stat-label">Estados cubiertos</div>
+            </div>
+            <div>
+                <div class="hero-stat-num">100%</div>
+                <div class="hero-stat-label">Procesos legales</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <div class="hero-remote-tag">
+            <span class="pulse-dot"></span>
+            Atención 100% Remota
+        </div>
+        <img
+            class="hero-img"
+            src="https://lh3.googleusercontent.com/d/1wQRMdsdsDO03Wx9aLEdA90oFbUq1iJg5"
+            alt="Gestoría vehichttpular premium"
+        >
+        <div class="hero-badge">
+            <div class="hero-badge-num">6</div>
+            <div class="hero-badge-text">Estados disponibles</div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     TRUST STRIP
+============================================================ -->
+<div class="trust-strip">
+    <div class="trust-item" data-aos="fade-up" data-aos-delay="0">
+        <div class="trust-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+        <div>
+            <div class="trust-item-title">Seguridad Jurídica</div>
+            <div class="trust-item-sub">Procesos 100% verificables</div>
+        </div>
+    </div>
+    <div class="trust-item" data-aos="fade-up" data-aos-delay="80">
+        <div class="trust-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div>
+            <div class="trust-item-title">Privacidad Total</div>
+            <div class="trust-item-sub">Sin visitas ni presencia física</div>
+        </div>
+    </div>
+    <div class="trust-item" data-aos="fade-up" data-aos-delay="160">
+        <div class="trust-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+        <div>
+            <div class="trust-item-title">+15 Años de Éxito</div>
+            <div class="trust-item-sub">Experiencia en trámites complejos</div>
+        </div>
+    </div>
+    <div class="trust-item" data-aos="fade-up" data-aos-delay="240">
+        <div class="trust-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div>
+            <div class="trust-item-title">Atención Digital</div>
+            <div class="trust-item-sub">Gestión sin que salga de casa</div>
+        </div>
+    </div>
+    <div class="trust-item" data-aos="fade-up" data-aos-delay="320">
+        <div class="trust-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
+        <div>
+            <div class="trust-item-title">Base: Cuernavaca</div>
+            <div class="trust-item-sub">Atención nacional 100% digital</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     COBERTURA / TABS
+============================================================ -->
+<section id="cobertura" class="section section-light">
+
+    <div class="tabs-header" data-aos="fade-up">
+        <span class="section-label">Cobertura Nacional</span>
+        <h2 class="section-title light">Seleccione su <em>Entidad</em></h2>
+        <p class="section-desc dark">Soluciones adaptadas a la normativa vigente de cada estado, gestionadas de forma remota desde Morelos.</p>
+
+        <div class="states-nav">
+            <button class="state-btn active" data-state="morelos"><span>Morelos</span></button>
+            <button class="state-btn" data-state="guerrero"><span>Guerrero</span></button>
+            <button class="state-btn" data-state="edomex"><span>Edo. México</span></button>
+            <button class="state-btn" data-state="michoacan"><span>Michoacán</span></button>
+            <button class="state-btn" data-state="oaxaca"><span>Oaxaca</span></button>
+            <button class="state-btn" data-state="cdmx"><span>CDMX</span></button>
+        </div>
+    </div>
+
+    <!-- MORELOS -->
+    <div id="morelos" class="tab-panel active">
+        <div class="state-header-block">
+            <div class="state-accent-bar"></div>
+            <div>
+                <h3>Estado de Morelos</h3>
+                <p></p>
+            </div>
+        </div>
+        <div class="tramites-grid">
+            <div class="card-tramite">
+                <div class="card-num">01</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+                <h4>Alta de Vehículo Nuevo</h4>
+                <p>Registro inicial de automóvil, camión o motocicleta ante las autoridades vehiculares del estado.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">02</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                <h4>Alta con Antecedentes Foráneos</h4>
+                <p>Alta de vehículo usado proveniente de otro estado — automóvil, motocicleta o camión — con o sin cambio de propietario.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">03</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></svg></div>
+                <h4>Placas de Discapacidad</h4>
+                <p>Gestión de placas y documentación con beneficios de movilidad para personas con capacidades diferentes.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">04</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17H5v-5l2-6h10l2 6v5z"/><path d="M3 17h1m16 0h1"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/></svg></div>
+                <h4>Placas de Auto Antiguo</h4>
+                <p>Trámite especializado para vehículos de colección y clásicos ante el padrón estatal.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">05</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg></div>
+                <h4>Refrendos</h4>
+                <p>Pago y gestión del refrendo vehicular anual sin filas ni desplazamientos.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">06</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
+                <h4>Cambio de Propietario</h4>
+                <p>Traspaso legal con actualización completa del padrón vehicular del estado de Morelos.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">07</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+                <h4>Bajas Definitivas</h4>
+                <p>Cancelación formal del registro vehicular ante el sistema estatal por venta, siniestro o cualquier otra causa.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">08</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg></div>
+                <h4>Recuperación de Pagos</h4>
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GUERRERO -->
+    <div id="guerrero" class="tab-panel">
+        <div class="state-header-block">
+            <div class="state-accent-bar"></div>
+            <div>
+                <h3>Estado de Guerrero</h3>
+                <p></p>
+            </div>
+        </div>
+        <div class="tramites-grid">
+            <div class="card-tramite">
+                <div class="card-num">01</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+                <h4>Alta de Vehículo Nuevo y Usado</h4>
+                <p>Registro ante el padrón vehicular de Guerrero para unidades nuevas o de segunda mano.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">02</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+                <h4>Reemplacamiento</h4>
+                <p>Sustitución y actualización de láminas con tarjeta de circulación vigente.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">03</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg></div>
+                <h4>Refrendos</h4>
+                <p>Gestión del refrendo anual de derechos vehiculares de forma remota y sin complicaciones.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">04</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+                <h4>Bajas Definitivas</h4>
+                <p>Cancelación formal del registro vehicular ante el sistema del estado de Guerrero.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDOMEX -->
+    <div id="edomex" class="tab-panel">
+        <div class="state-header-block">
+            <div class="state-accent-bar"></div>
+            <div>
+                <h3>Estado de México</h3>
+                <p></p>
+            </div>
+        </div>
+        <div class="tramites-grid">
+            <div class="card-tramite">
+                <div class="card-num">01</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+                <h4>Alta de Vehículo Nuevo</h4>
+                <p>Registro inicial de camión o motocicleta ante el padrón vehicular mexiquense.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">02</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                <h4>Alta con Antecedentes Foráneos</h4>
+                <p>Alta de camión o motocicleta con antecedentes de otro estado, gestionada íntegramente de forma remota.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">03</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+                <h4>Bajas Definitivas</h4>
+                <p>Cancelación del registro vehicular ante el sistema del Estado de México.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">04</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
+                <h4>Cambios de Propietario</h4>
+                <p>Traspaso legal y actualización del padrón para transmisión de propiedad vehicular en el Edomex.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MICHOACAN -->
+    <div id="michoacan" class="tab-panel">
+        <div class="state-header-block">
+            <div class="state-accent-bar"></div>
+            <div>
+                <h3>Estado de Michoacán</h3>
+                <p></p>
+            </div>
+        </div>
+        <div class="tramites-grid">
+            <div class="card-tramite">
+                <div class="card-num">01</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+                <h4>Alta de Vehículo Nuevo</h4>
+                <p>Registro de camión y motocicleta nuevos ante el padrón vehicular del estado de Michoacán.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">02</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></svg></div>
+                <h4>Placas de Discapacidad</h4>
+                <p>Gestión de placas especiales con beneficios de movilidad para personas con capacidades diferentes.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">03</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+                <h4>Bajas Definitivas</h4>
+                <p>Cancelación formal del registro vehicular ante el sistema del estado de Michoacán.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">04</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
+                <h4>Cambios de Propietario</h4>
+                <p>Traspaso legal con actualización completa del padrón vehicular michoacano.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- OAXACA -->
+    <div id="oaxaca" class="tab-panel">
+        <div class="state-header-block">
+            <div class="state-accent-bar"></div>
+            <div>
+                <h3>Estado de Oaxaca</h3>
+                <p></p>
+            </div>
+        </div>
+        <div class="tramites-grid">
+            <div class="card-tramite">
+                <div class="card-num">01</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+                <h4>Alta de Vehículo Nuevo</h4>
+                <p>Registro de automóvil, camión o motocicleta nuevos ante las autoridades vehiculares de Oaxaca.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">02</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+                <h4>Alta con Antecedentes Foráneos</h4>
+                <p>Alta de camión o motocicleta con historial de otro estado, gestionada de forma remota.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">03</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+                <h4>Bajas Vehiculares</h4>
+                <p>Cancelación del registro vehicular ante el padrón del estado de Oaxaca.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">04</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
+                <h4>Cambios de Propietario</h4>
+                <p>Traspaso legal con actualización completa del padrón vehicular oaxaqueño.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CDMX -->
+    <div id="cdmx" class="tab-panel">
+        <div class="state-header-block">
+            <div class="state-accent-bar"></div>
+            <div>
+                <h3>Ciudad de México</h3>
+                <p></p>
+            </div>
+        </div>
+        <div class="tramites-grid">
+            <div class="card-tramite">
+                <div class="card-num">01</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+                <h4>Alta de Vehículo Nuevo</h4>
+                <p>Registro de camión y motocicleta nuevos ante SEMOVI y las autoridades capitalinas.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">02</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+                <h4>Bajas Definitivas</h4>
+                <p>Cancelación formal del registro vehicular ante el sistema de la Ciudad de México.</p>
+            </div>
+            <div class="card-tramite">
+                <div class="card-num">03</div>
+                <div class="card-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
+                <h4>Cambios de Propietario</h4>
+                <p>Protección jurídica completa y actualización del padrón al transferir la propiedad vehicular en CDMX.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- ============================================================
+     PRIVACIDAD / REMOTO
+============================================================ -->
+<div class="privacy-section">
+    <div class="privacy-visual" data-aos="fade-right">
+        <img
+            class="privacy-img"
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80"
+            alt="Consultoría confidencial"
+        >
+        <div class="privacy-overlay-card">
+            <div class="privacy-overlay-title">Sede Operativa</div>
+            <div class="privacy-overlay-text">Cuernavaca,<br>Morelos</div>
+        </div>
+    </div>
+
+    <div data-aos="fade-left" data-aos-delay="100">
+        <span class="section-label">Modalidad de Servicio</span>
+        <h2 class="section-title">Privacidad y <em>confidencialidad</em> ante todo</h2>
+        <p class="section-desc" style="color: var(--text-muted);">
+            Operamos 100% de manera remota y digital. Nuestros clientes nunca necesitan visitar ninguna oficina física; toda la comunicación y gestión de documentos se realiza mediante canales seguros y privados.
+        </p>
+
+        <div class="privacy-features">
+            <div class="privacy-feat">
+                <div class="privacy-feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+                <div>
+                    <h5>Gestión 100% Digital</h5>
+                    <p>Envío y recepción segura de documentos digitales. Sin desplazamientos ni exposición innecesaria.</p>
+                </div>
+            </div>
+            <div class="privacy-feat">
+                <div class="privacy-feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                <div>
+                    <h5>Canal Directo y Privado</h5>
+                    <p>Comunicación exclusiva por WhatsApp cifrado, un solo punto de contacto para todo el proceso.</p>
+                </div>
+            </div>
+            <div class="privacy-feat">
+                <div class="privacy-feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+                <div>
+                    <h5>Entrega a Domicilio</h5>
+                    <p>Sus documentos y placas llegan directamente a la puerta de su casa, sin que usted salga.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     PROCESO
+============================================================ -->
+<section id="proceso" class="section section-mid">
+    <div style="text-align: center; margin-bottom: 10px;" data-aos="fade-up">
+        <span class="section-label" style="justify-content: center;">Metodología</span>
+        <h2 class="section-title" style="text-align: center;">Su trámite en <em>4 pasos</em></h2>
+        <p class="section-desc" style="margin: 14px auto 0; text-align: center;">Un proceso transparente, claro y sin sorpresas desde el primer contacto.</p>
+    </div>
+
+    <div class="proceso-grid">
+        <div class="paso" data-aos="fade-up" data-aos-delay="0">
+            <div class="paso-circle">
+                <span class="paso-num-badge">01</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h4>Asesoría</h4>
+            <p>Evaluamos su caso por WhatsApp sin ningún costo ni compromiso.</p>
+        </div>
+        <div class="paso" data-aos="fade-up" data-aos-delay="120">
+            <div class="paso-circle">
+                <span class="paso-num-badge">02</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><polyline points="12 11 12 17"/><polyline points="9 14 12 17 15 14"/></svg>
+            </div>
+            <h4>Recepción</h4>
+            <p>Recibimos sus documentos digitalmente por canales privados y seguros.</p>
+        </div>
+        <div class="paso" data-aos="fade-up" data-aos-delay="240">
+            <div class="paso-circle">
+                <span class="paso-num-badge">03</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <h4>Gestión</h4>
+            <p>Realizamos el proceso íntegro ante las autoridades competentes.</p>
+        </div>
+        <div class="paso" data-aos="fade-up" data-aos-delay="360">
+            <div class="paso-circle">
+                <span class="paso-num-badge">04</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h4>Entrega</h4>
+            <p>Sus documentos y placas llegan directamente a su domicilio.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     REVIEWS
+============================================================ -->
+<section class="section">
+    <div data-aos="fade-up">
+        <span class="section-label">Testimonios</span>
+        <h2 class="section-title">Clientes que <em>confían</em> en nosotros</h2>
+    </div>
+
+    <div class="reviews-grid">
+        <div class="review-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="review-quote-mark">"</div>
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Resolvieron mi placa de auto antiguo en Morelos con una profesionalidad impecable. El seguimiento fue constante y nunca tuve que salir de mi casa.</p>
+            <div class="reviewer">
+                <div class="rev-avatar">M</div>
+                <div>
+                    <div class="rev-name">María González</div>
+                    <div class="rev-location">Cuernavaca, Morelos</div>
+                </div>
+            </div>
+        </div>
+        <div class="review-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="review-quote-mark">"</div>
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">El reemplacamiento en el Edomex era un caos, pero el equipo de GVE lo hizo ver sencillo. Todo 100% remoto y en tiempo récord. Muy recomendados.</p>
+            <div class="reviewer">
+                <div class="rev-avatar">R</div>
+                <div>
+                    <div class="rev-name">Roberto Herrera</div>
+                    <div class="rev-location">Naucalpan, Estado de México</div>
+                </div>
+            </div>
+        </div>
+        <div class="review-card" data-aos="fade-up" data-aos-delay="240">
+            <div class="review-quote-mark">"</div>
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Hice el cambio de propietario de mi camioneta en Guerrero sin moverme de la CDMX. El proceso fue completamente transparente y sin sorpresas.</p>
+            <div class="reviewer">
+                <div class="rev-avatar">A</div>
+                <div>
+                    <div class="rev-name">Alejandra Vidal</div>
+                    <div class="rev-location">CDMX</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     CTA
+============================================================ -->
+<section class="cta-section">
+    <div data-aos="fade-up">
+        <span class="section-label" style="justify-content: center;">Comience ahora</span>
+        <h2 class="section-title">¿Listo para resolver su trámite<br><em>sin complicaciones?</em></h2>
+        <p class="cta-desc">Cotización formal en menos de 10 minutos. Sin costo, sin compromiso.</p>
+        <div class="cta-actions">
+            <a href="#" id="ctaCta" class="btn-primary" style="font-size:0.82rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Solicitar asesoría por WhatsApp
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+    <div class="footer-logo">GVE EXPRESS</div>
+    <div class="footer-note">© 2024 · Gestoría Vehicular Nacional · Cuernavaca, Morelos</div>
+    <div class="footer-privacy">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Atención 100% remota · Privacidad garantizada
+    </div>
+</footer>
+
+<!-- WhatsApp Float -->
+<a href="#" id="whatsappFloat" class="whatsapp-float" target="_blank" rel="noopener">
+    <svg width="30" height="30" fill="white" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.891 11.891-11.891 3.181 0 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.402 0 6.556-5.332 11.89-11.892 11.89-2.015 0-3.991-.511-5.741-1.478l-6.354 1.7zm6.75-3.176l.362.215c1.4.833 3.012 1.272 4.667 1.272 4.977 0 9.027-4.049 9.027-9.026 0-2.411-.937-4.678-2.64-6.381s-3.97-2.64-6.381-2.64c-4.977 0-9.026 4.049-9.026 9.026 0 1.774.52 3.504 1.503 5.011l.235.362-.993 3.634 3.722-.976zm10.203-5.508c-.285-.143-1.687-.832-1.947-.927-.261-.095-.451-.143-.641.143-.19.285-.736.927-.903 1.117-.166.19-.332.214-.618.071-.285-.143-1.204-.444-2.293-1.415-.848-.756-1.42-1.689-1.586-1.974-.166-.285-.018-.439.124-.581.128-.127.285-.332.428-.499.142-.166.19-.285-.285-.476.095-.19.048-.356-.024-.499-.071-.143-.641-1.545-.879-2.116-.232-.557-.466-.481-.641-.489-.166-.008-.356-.01-.547-.01s-.5.071-.761.356c-.261.285-.998.975-.998 2.376s1.022 2.758 1.165 2.948c.143.19 2.011 3.063 4.871 4.305.681.295 1.212.471 1.626.603.685.217 1.307.186 1.8.113.55-.082 1.687-.69 1.925-1.355.238-.665.238-1.236.166-1.355-.072-.12-.262-.19-.547-.333z"/>
+    </svg>
+</a>
+
+<!-- ============================================================
+     AOS JS
+============================================================ -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+    // ── Init AOS (opcional — no bloquea si falla) ─────────────
+    try {
+        AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
+    } catch(e) {}
+
+
+    // ── Progress Bar ──────────────────────────────────────────
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = pct + '%';
+    });
+
+    // ── Tabs Logic ────────────────────────────────────────────
+    const PHONE = '5217771289031'; // ← TU NÚMERO AQUÍ
+
+    function setWhatsApp(state) {
+        const msg = encodeURIComponent(
+            `Hola, me interesa asesoría profesional para un trámite vehicular en ${state.toUpperCase()}.`
+        );
+        const url = `https://wa.me/${PHONE}?text=${msg}`;
+        const ids = ['whatsappFloat', 'navCta', 'heroCta', 'ctaCta'];
+        ids.forEach(id => { const el = document.getElementById(id); if (el) el.href = url; });
+    }
+
+    document.querySelectorAll('.state-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const state = btn.dataset.state;
+
+            // Update buttons
+            document.querySelectorAll('.state-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Switch panels
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            const panel = document.getElementById(state);
+            if (panel) panel.classList.add('active');
+
+            // Update WhatsApp
+            setWhatsApp(state);
+        });
+    });
+
+    // ── On Load ───────────────────────────────────────────────
+    window.addEventListener('load', () => {
+        setWhatsApp('morelos');
+    });
+</script>
+</body>
+</html>
