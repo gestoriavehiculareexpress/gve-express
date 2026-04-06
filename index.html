@@ -941,9 +941,9 @@
            RESPONSIVE
         ============================================================ */
         @media (max-width: 960px) {
-            .hero { grid-template-columns: 1fr; min-height: auto; }
-            .hero-right { display: none; }
-            .hero-left { padding: 100px 6% 60px; }
+            .hero { grid-template-columns: 1fr 1fr; min-height: 100svh; }
+            .hero-right { display: block; }
+            .hero-left { padding: 100px 5% 60px; }
             .proceso-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
             .proceso-grid::before { display: none; }
             .privacy-section { grid-template-columns: 1fr; gap: 40px; }
@@ -953,7 +953,11 @@
 
         @media (max-width: 600px) {
             .section { padding: 70px 5%; }
-            .hero-left { padding: 90px 5% 60px; }
+            .hero { grid-template-columns: 1fr 1fr; }
+            .hero-right { display: block; }
+            .hero-left { padding: 90px 4% 60px; }
+            .hero h1 { font-size: 1.6rem; }
+            .hero-desc { font-size: 0.85rem; }
             .hero-stats { flex-direction: column; gap: 24px; }
             .proceso-grid { grid-template-columns: 1fr; }
             .trust-strip { padding: 24px 5%; }
